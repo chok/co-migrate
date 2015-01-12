@@ -221,18 +221,21 @@ obj.init = function(compound) {
         log(direction, migration.title);
       });
 
+      set.on('error', function(err){
+        if(err) console.log("Error: ", err);
+        callback();
+      });
+
       set.on('save', function(){
         log('migration', 'complete');
+        callback();
       });
 
       var migrationPath = migrationName
         ? join('migrations', migrationName)
         : migrationName;
      
-      set[direction](function(err){
-        if(err) console.log("Error: ", err);
-        callback();
-      }, migrationPath);
+      set[direction](migrationPath);
     }
 
 };
