@@ -68,7 +68,7 @@ obj.init = function(compound) {
 
         var curr = pad((migrations.pop() || 0) + 1)
           , title = slugify(args.join(' '));
-        title = title ? curr + '-' + title : curr; 
+        title = title ? curr + '-' + title : curr;
         create(title, callback);
       }
     };
@@ -226,16 +226,14 @@ obj.init = function(compound) {
         callback();
       });
 
-      set.on('save', function(){
-        log('migration', 'complete');
-        callback();
-      });
-
       var migrationPath = migrationName
         ? join('migrations', migrationName)
         : migrationName;
-     
-      set[direction](migrationPath);
+
+      set[direction](migrationPath, function(err) {
+        log('migration', 'complete');
+        callback();
+      });
     }
 
 };
